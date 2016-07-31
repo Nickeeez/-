@@ -1,0 +1,158 @@
+#include<stdio.h>
+#include <time.h>
+#include <stdlib.h>
+void tourist();
+void main();
+void RankingList();
+void online();
+void Save();
+void main() 
+{
+	int choice;
+	printf("1.游客模式\n");
+	printf("2.线上模式\n");
+	printf("3.排 行 榜\n");
+	printf("4.退    出\n");
+	printf("请选择：");
+	scanf("%d", &choice);
+
+	switch (choice)
+	{
+	case 1:tourist();main(); break;
+	case 2:online();main(); break;
+	case 3:RankingList();main();break;
+	case 4:break;
+	default:printf("请输入正确选择！\n");main();break;
+	}
+}
+
+void tourist()
+{
+	int com,user,a=0,b=0,c=0;
+	srand((unsigned)time(NULL)); 
+	printf("进入游戏\n");
+	do{
+		printf("请出拳（1.剪刀、2.石头、3.布）:");
+		scanf("%d",&user);
+		com=rand()%3+1; 
+		printf("电脑出%s\n",com==1?"剪刀":com==2?"石头":"布");
+		switch(com-user)
+		{
+		case 0:
+            c++;
+			printf("平\n");
+			printf("------------------\n");break;
+		case 1:case -2:
+			printf("赢\n");
+			a++;
+			printf("------------------\n");break;
+		case -1:case 2:
+			printf("输\n");
+			b++;
+			printf("------------------\n");
+		}
+	
+	  }while(a+b+c<7&&a<4&&b<4);
+	printf("赢%d局，输%d局，平%d局\n\n",a,b,c);
+	if(a-b>0) printf("你赢了!\n");
+	  if(a-b<0) printf("你输了!\n");
+	  if(a-b==0) printf("平局\n");
+ }
+ 
+void online()
+{
+	struct Result;
+	r.win = 0;
+	r.lost = 0;
+	scanf("%s", r.name);
+	r.win = 0;
+	r.lost = 0;
+	int com,user,a=0,b=0,c=0;
+	srand((unsigned)time(NULL)); 
+	printf("进入游戏\n");
+	do{
+		printf("请出拳（1.剪刀、2.石头、3.布）:");
+		scanf("%d",&user);
+		com=rand()%3+1; 
+		printf("电脑出%s\n",com==1?"剪刀":com==2?"石头":"布");
+		switch(com-user)
+		{
+		case 0:
+            c++;
+			printf("平\n");
+			printf("------------------\n");break;
+		case 1:case -2:
+			printf("赢\n");
+			a++;
+			printf("------------------\n");break;
+		case -1:case 2:
+			printf("输\n");
+			b++;
+			printf("------------------\n");
+		}
+	printf("姓名：%s  赢：%d  输：%d\n", r.name, r.win, r.lost);
+}
+
+struct Result *Sort(struct Result *head)
+{
+	struct Result *first;
+	struct Result *tail;
+	struct Result *p_min;
+	struct Result *min;
+	struct Result *p;
+	first = NULL;   
+	while (head != NULL)
+	{
+		for (p = head, min = head; p->next != NULL; p = p->next)
+		{ 
+			if (p->next->probability > min->probability)
+			{ 
+				p_min = p;
+				min = p->next;
+			} 
+		}
+		if (first == NULL)
+		{ 
+			first = min;
+			tail = min;
+		} 
+		else
+		{ 
+			tail->next = min;
+			tail = min;
+		}
+		if (min == head)
+		{ 
+			head = head->next;
+		}
+		else
+		{ p_min->next = min->next;
+		} 
+	}
+	if (first != NULL)
+	{ 
+		tail->next = NULL;
+	}
+	head = first; 
+	return head;
+}
+
+void Print(struct Result *p)
+{
+	while (p->next)
+	{
+		printf("姓名：%s  赢：%d  输：%d  胜率：%.2lf\n", p->name, p->win, p->lost,p->probability);
+		p = p->next;
+	}
+}
+void Save(struct Result *R)
+{
+	int flag = 0;
+	struct Result *p1, *head;
+	head = p1 = malloc(Lenth);
+	FILE *fp;
+	if (!(fp = fopen("RankingList.txt", "a+")))
+	{
+		printf("文件打开失败！\n");
+		exit(1);
+	}
